@@ -1,10 +1,10 @@
 {
   "name": "academic-research-skills",
   "owner": {
-    "name": "Cheng-I Wu",
-    "url": "https://github.com/Imbad0202"
+    "name": "Firdaus (firdausmntp)",
+    "url": "https://github.com/firdausmntp"
   },
-  "description": "Academic Research Skills — contract-audited research, writing, peer review, and pipeline orchestration for Claude Code.",
+  "description": "nyekripsi — Indonesian Undergraduate Thesis (Skripsi S1) Toolkit & Academic Research Skills.",
   "plugins": [
     {
       "name": "academic-research-skills",

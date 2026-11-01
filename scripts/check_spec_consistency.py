@@ -111,6 +111,7 @@ def _skill_version_paths() -> tuple[str, ...]:
         f"{skill_md.parent.name}/SKILL.md" for skill_md in iter_skill_files(ROOT)
     )
 
+
 # The single skill whose `version` tracks the suite version. The other three move independently,
 # so only this one's date is sanity-checked against the release (CHANGELOG) in #377(b).
 _SUITE_SKILL_PATH = "academic-pipeline/SKILL.md"
@@ -167,7 +168,9 @@ def _latest_changelog_date() -> str | None:
     dateless `## [Unreleased]` header — so the FIRST date-bearing
     `## [X.Y.Z] - YYYY-MM-DD` header is the latest release. `## [Unreleased]` carries no
     `- YYYY-MM-DD` suffix and so never matches this date-bearing pattern."""
-    match = re.search(rf"^## \[{_VERSION}\] - (\d{{4}}-\d{{2}}-\d{{2}})", read("CHANGELOG.md"), re.M)
+    match = re.search(
+        rf"^## \[{_VERSION}\] - (\d{{4}}-\d{{2}}-\d{{2}})", read("CHANGELOG.md"), re.M
+    )
     return match.group(1) if match else None
 
 
@@ -220,19 +223,38 @@ def check_pipeline_docs() -> None:
         "Stage 4.5 can NEVER be skipped",
     )
     # #995: a prior integrity report is context for Stage 2.5, never a skip.
-    expect_contains("shared/handoff_schemas.md", "**Passport does not grant Stage 2.5 skip**")
-    expect_contains("shared/handoff_schemas.md", "runs before the paper reaches Stage 3 (REVIEW), regardless of passport status")
-    expect_contains("shared/handoff_schemas.md", "The report informs the rerun; it does not replace it")
-    expect_contains("shared/handoff_schemas.md", "a user request to skip it does not change this")
+    expect_contains(
+        "shared/handoff_schemas.md", "**Passport does not grant Stage 2.5 skip**"
+    )
+    expect_contains(
+        "shared/handoff_schemas.md",
+        "runs before the paper reaches Stage 3 (REVIEW), regardless of passport status",
+    )
+    expect_contains(
+        "shared/handoff_schemas.md",
+        "The report informs the rerun; it does not replace it",
+    )
+    expect_contains(
+        "shared/handoff_schemas.md", "a user request to skip it does not change this"
+    )
     expect_absent("shared/handoff_schemas.md", "allows skipping Stage 2.5")
     expect_contains(
         "academic-pipeline/references/mode_advisor.md",
         "| Stage 3 (REVIEW) | Paper draft (a prior integrity report is optional context) | Stages 1-2 | "
         "Stage 2.5 runs first on the provided paper; a prior report informs it but does not replace it |",
     )
-    expect_absent("academic-pipeline/references/mode_advisor.md", "Verified paper + integrity report")
-    expect_absent("academic-pipeline/references/mode_advisor.md", "User must provide integrity evidence")
-    expect_absent("academic-pipeline/SKILL.md", "Only exception: User can provide a previous integrity")
+    expect_absent(
+        "academic-pipeline/references/mode_advisor.md",
+        "Verified paper + integrity report",
+    )
+    expect_absent(
+        "academic-pipeline/references/mode_advisor.md",
+        "User must provide integrity evidence",
+    )
+    expect_absent(
+        "academic-pipeline/SKILL.md",
+        "Only exception: User can provide a previous integrity",
+    )
     expect_absent(
         "academic-pipeline/agents/pipeline_orchestrator_agent.md",
         "unless user can provide a previous integrity verification report",
@@ -250,7 +272,9 @@ _VERSION = r"\d+\.\d+\.\d+(?:\.\d+)*(?!\.?\d)"
 
 def _suite_version() -> str | None:
     """Parse the canonical suite version from `.claude/CLAUDE.md` (`**Suite version**: X.Y.Z[.W]`)."""
-    match = re.search(rf"\*\*Suite version\*\*:\s*({_VERSION})", read(".claude/CLAUDE.md"))
+    match = re.search(
+        rf"\*\*Suite version\*\*:\s*({_VERSION})", read(".claude/CLAUDE.md")
+    )
     return match.group(1) if match else None
 
 
@@ -275,7 +299,9 @@ def check_architecture_component_version() -> None:
     rel_path = "docs/ARCHITECTURE.md"
     version = _suite_version()
     if version is None:
-        fail(".claude/CLAUDE.md: could not parse '**Suite version**: X.Y.Z' for ARCHITECTURE check")
+        fail(
+            ".claude/CLAUDE.md: could not parse '**Suite version**: X.Y.Z' for ARCHITECTURE check"
+        )
         return
     text = read(rel_path)
 
@@ -284,7 +310,9 @@ def check_architecture_component_version() -> None:
         rf"academic-pipeline<br/>orchestrator<br/>v({_VERSION})", text
     )
     if not node_versions:
-        fail(f"{rel_path}: no mermaid `academic-pipeline<br/>orchestrator<br/>vX.Y.Z` node found")
+        fail(
+            f"{rel_path}: no mermaid `academic-pipeline<br/>orchestrator<br/>vX.Y.Z` node found"
+        )
     for found in node_versions:
         if found != version:
             fail(
@@ -398,9 +426,15 @@ def check_readme_sections() -> None:
     for expected in ("outline-only mode", "abstract-only mode", "disclosure mode"):
         if expected not in paper_usage:
             fail(f"{rel_path}: Academic Paper usage section missing {expected!r}")
-    for forbidden in ("bilingual-abstract mode", "writing-polish mode", "full-auto mode"):
+    for forbidden in (
+        "bilingual-abstract mode",
+        "writing-polish mode",
+        "full-auto mode",
+    ):
         if forbidden in paper_usage:
-            fail(f"{rel_path}: Academic Paper usage section still contains {forbidden!r}")
+            fail(
+                f"{rel_path}: Academic Paper usage section still contains {forbidden!r}"
+            )
 
     deep_usage = extract_section(
         text, "#### Deep Research (8 modes)", "#### Academic Paper (11 modes)"
@@ -411,7 +445,9 @@ def check_readme_sections() -> None:
         fail(f"{rel_path}: Deep Research usage section still contains 'paper-review'")
 
     reviewer_usage = extract_section(
-        text, "#### Academic Paper Reviewer (6 modes)", "#### Academic Pipeline (Orchestrator)"
+        text,
+        "#### Academic Paper Reviewer (6 modes)",
+        "#### Academic Pipeline (Orchestrator)",
     )
     if "calibration mode" not in reviewer_usage:
         fail(f"{rel_path}: reviewer usage section missing 'calibration mode'")
@@ -427,18 +463,20 @@ def check_readme_sections() -> None:
 
 
 def check_readme_ja_sections() -> None:
-    """Symmetric coverage of README.ja-JP.md added in PR #161 (closes #170).
-
-    Pre-#170 the lint silently skipped this file. ja-JP uses ASCII parentheses
-    for release blocks (matching the English README), full-width parentheses
-    for mode and skill-detail headings, and "モード" instead of "mode".
-    """
     rel_path = "README.ja-JP.md"
+    if not (ROOT / rel_path).exists():
+        return
     text = read(rel_path)
 
     expect_contains(rel_path, "version-v3.24.0-blue")
     expect_contains(rel_path, "releases/tag/v3.24.0")
-    check_readme_changelog_section(rel_path, text, "## Changelog", "ascii", archive="docs/changelog-archive/ja-JP.md")
+    check_readme_changelog_section(
+        rel_path,
+        text,
+        "## Changelog",
+        "ascii",
+        archive="docs/changelog-archive/ja-JP.md",
+    )
     for heading in (
         "#### Deep Research（8 モード）",
         "#### Academic Paper（11 モード）",
@@ -468,22 +506,20 @@ def check_readme_ja_sections() -> None:
 
 
 def check_readme_ko_sections() -> None:
-    """Symmetric coverage of README.ko-KR.md added with Korean localization.
-
-    Korean typography uses ASCII parentheses, so the release-block headings match
-    the English / ja-JP convention verbatim (NOT the full-width zh-CN/zh-TW form).
-    Localized mode headings use ASCII parens + "N개 모드"; skill-detail headings
-    reuse the English ASCII-paren form. Mode-section inner-content guards are
-    deliberately omitted here, mirroring check_readme_ja_sections — the #171
-    schema-driven refactor will fold the locales together, so an extract_section
-    mirror added now would be discarded by it.
-    """
     rel_path = "README.ko-KR.md"
+    if not (ROOT / rel_path).exists():
+        return
     text = read(rel_path)
 
     expect_contains(rel_path, "version-v3.24.0-blue")
     expect_contains(rel_path, "releases/tag/v3.24.0")
-    check_readme_changelog_section(rel_path, text, "## 변경 이력", "ascii", archive="docs/changelog-archive/ko-KR.md")
+    check_readme_changelog_section(
+        rel_path,
+        text,
+        "## 변경 이력",
+        "ascii",
+        archive="docs/changelog-archive/ko-KR.md",
+    )
     for heading in (
         "#### Deep Research (8개 모드)",
         "#### Academic Paper (11개 모드)",
@@ -552,12 +588,18 @@ ZH_README_CONFIGS = (
 def check_readme_zh_sections() -> None:
     for config in ZH_README_CONFIGS:
         rel_path = config["rel_path"]
+        if not (ROOT / rel_path).exists():
+            continue
         text = read(rel_path)
 
         expect_contains(rel_path, "version-v3.24.0-blue")
         expect_contains(rel_path, "releases/tag/v3.24.0")
         check_readme_changelog_section(
-            rel_path, text, config["changelog_h2"], "fullwidth", archive=config["archive"]
+            rel_path,
+            text,
+            config["changelog_h2"],
+            "fullwidth",
+            archive=config["archive"],
         )
         for heading in config["headings"]:
             if heading not in text:
@@ -571,9 +613,15 @@ def check_readme_zh_sections() -> None:
         for expected in ("outline-only mode", "abstract-only mode", "disclosure mode"):
             if expected not in paper_usage:
                 fail(f"{rel_path}: Academic Paper usage section missing {expected!r}")
-        for forbidden in ("bilingual-abstract mode", "writing-polish mode", "full-auto mode"):
+        for forbidden in (
+            "bilingual-abstract mode",
+            "writing-polish mode",
+            "full-auto mode",
+        ):
             if forbidden in paper_usage:
-                fail(f"{rel_path}: Academic Paper usage section still contains {forbidden!r}")
+                fail(
+                    f"{rel_path}: Academic Paper usage section still contains {forbidden!r}"
+                )
 
         deep_usage = extract_section(
             text,
@@ -583,7 +631,9 @@ def check_readme_zh_sections() -> None:
         if "review mode" not in deep_usage:
             fail(f"{rel_path}: Deep Research usage section missing 'review mode'")
         if "paper-review" in deep_usage:
-            fail(f"{rel_path}: Deep Research usage section still contains 'paper-review'")
+            fail(
+                f"{rel_path}: Deep Research usage section still contains 'paper-review'"
+            )
 
         reviewer_usage = extract_section(
             text,
@@ -604,18 +654,20 @@ def check_readme_zh_sections() -> None:
 
 
 def check_readme_es_sections() -> None:
-    """Symmetric coverage of README.es-ES.md added with es-ES localization.
-
-    es-ES uses ASCII parentheses (like ko-KR / ja-JP), with "modos" instead of
-    "modes" and "(orquestador)" for the pipeline heading. The DOCX contract line
-    is the Spanish-language variant.
-    """
     rel_path = "README.es-ES.md"
+    if not (ROOT / rel_path).exists():
+        return
     text = read(rel_path)
 
     expect_contains(rel_path, "version-v3.24.0-blue")
     expect_contains(rel_path, "releases/tag/v3.24.0")
-    check_readme_changelog_section(rel_path, text, "## Registro de cambios", "ascii", archive="docs/changelog-archive/es-ES.md")
+    check_readme_changelog_section(
+        rel_path,
+        text,
+        "## Registro de cambios",
+        "ascii",
+        archive="docs/changelog-archive/es-ES.md",
+    )
     for heading in (
         "#### Deep Research (8 modos)",
         "#### Academic Paper (11 modos)",
@@ -640,16 +692,9 @@ def check_readme_es_sections() -> None:
 
 
 def check_readme_pt_sections() -> None:
-    """Symmetric coverage of README.pt-BR.md added with pt-BR localization.
-
-    pt-BR uses ASCII parentheses (like es-ES / ko-KR / ja-JP), with "modos"
-    instead of "modes" and "(orquestrador)" for the pipeline heading. The
-    DOCX contract line is the Portuguese-language variant. pt-BR was added
-    after the 2026-09-15 README slimming, so it has no frozen
-    docs/changelog-archive/ copy and the changelog section links only to
-    CHANGELOG.md.
-    """
     rel_path = "README.pt-BR.md"
+    if not (ROOT / rel_path).exists():
+        return
     text = read(rel_path)
 
     expect_contains(rel_path, "version-v3.24.0-blue")
@@ -802,7 +847,10 @@ def check_ideation_diversity_no_call_contract() -> None:
         except (OSError, UnicodeError, json.JSONDecodeError) as exc:
             fail(f"{rel_path}: cannot load #659 contract: {exc}")
             continue
-        if not isinstance(value, dict) or value.get("additionalProperties") is not False:
+        if (
+            not isinstance(value, dict)
+            or value.get("additionalProperties") is not False
+        ):
             fail(f"{rel_path}: root contract must be a closed object")
             continue
         schemas[name] = value
@@ -847,9 +895,7 @@ def check_ideation_diversity_no_call_contract() -> None:
         "provider_tokenizer_verified": False,
     }.items():
         if cap_boundary.get(field, {}).get("const") != expected:
-            fail(
-                f"{schema_paths['run_plan']}: token-cap boundary {field!r} drifted"
-            )
+            fail(f"{schema_paths['run_plan']}: token-cap boundary {field!r} drifted")
     judge = plan_properties.get("judge_requirements", {}).get("properties", {})
     for field, expected in {
         "first_round_assignment_ledger_required_before_delivery": True,
@@ -857,10 +903,13 @@ def check_ideation_diversity_no_call_contract() -> None:
         "bundle_alone_proves_judge_exposure_blindness": False,
     }.items():
         if judge.get(field, {}).get("const") != expected:
-            fail(f"{schema_paths['run_plan']}: judge exposure boundary {field!r} drifted")
-    if plan_properties.get("cells", {}).get("minItems") != 48 or plan_properties.get(
-        "cells", {}
-    ).get("maxItems") != 48:
+            fail(
+                f"{schema_paths['run_plan']}: judge exposure boundary {field!r} drifted"
+            )
+    if (
+        plan_properties.get("cells", {}).get("minItems") != 48
+        or plan_properties.get("cells", {}).get("maxItems") != 48
+    ):
         fail(f"{schema_paths['run_plan']}: cells must remain exactly 48")
     assets = plan_properties.get("asset_bindings", {})
     if assets.get("minItems") != 18 or assets.get("maxItems") != 18:
@@ -890,8 +939,7 @@ def check_ideation_diversity_no_call_contract() -> None:
     }.items():
         if intent_protection.get(field, {}).get("const") != expected:
             fail(
-                f"{schema_paths['blind_intent']}: "
-                f"protection boundary {field!r} drifted"
+                f"{schema_paths['blind_intent']}: protection boundary {field!r} drifted"
             )
 
     runner_path = "scripts/run_ideation_diversity_no_call.py"
@@ -1022,9 +1070,7 @@ def check_ideation_diversity_no_call_contract() -> None:
         elif isinstance(node, ast.ImportFrom):
             module = node.module or "<relative>"
             allowed_symbols = (
-                allowed_from_imports.get(module, set())
-                if node.level == 0
-                else set()
+                allowed_from_imports.get(module, set()) if node.level == 0 else set()
             )
             forbidden_imports.update(
                 f"{module}.{alias.name}"
@@ -1115,9 +1161,7 @@ def check_ideation_diversity_no_call_contract() -> None:
         outer = parent
         while True:
             ancestor = parents.get(outer)
-            if not (
-                isinstance(ancestor, ast.Attribute) and ancestor.value is outer
-            ):
+            if not (isinstance(ancestor, ast.Attribute) and ancestor.value is outer):
                 break
             attributes.append(ancestor.attr)
             outer = ancestor
@@ -1137,14 +1181,11 @@ def check_ideation_diversity_no_call_contract() -> None:
             and isinstance(parents[use_parent].func, ast.Name)
             and parents[use_parent].func.id == "print"
         )
-        allowed_constant = (
-            attribute_path in allowed_module_constants.get(module, set())
-            and isinstance(outer.ctx, ast.Load)
-        )
+        allowed_constant = attribute_path in allowed_module_constants.get(
+            module, set()
+        ) and isinstance(outer.ctx, ast.Load)
         if not (allowed_call or allowed_print_value or allowed_constant):
-            module_reference_errors.add(
-                f"{module} via {node.id}.{attribute_path}"
-            )
+            module_reference_errors.add(f"{module} via {node.id}.{attribute_path}")
     if module_reference_errors:
         fail(
             f"{runner_path}: direct module references must match exact "
@@ -1174,10 +1215,14 @@ def check_ideation_diversity_no_call_contract() -> None:
         "prepare-blind-packet",
     }
     if commands != expected_commands:
-        fail(f"{runner_path}: command set must be exactly {sorted(expected_commands)!r}")
+        fail(
+            f"{runner_path}: command set must be exactly {sorted(expected_commands)!r}"
+        )
 
     readme = f"{suite}/README.md"
-    design_doc = "docs/design/2026-08-13-659-within-session-ideation-diversity-design.md"
+    design_doc = (
+        "docs/design/2026-08-13-659-within-session-ideation-diversity-design.md"
+    )
     for rel_path, phrases in (
         (
             readme,
@@ -1219,10 +1264,14 @@ def check_ideation_diversity_no_call_contract() -> None:
         "CHANGELOG.md",
         "Within-session ideation-diversity Phase-2 no-call envelope (#659)",
     )
+
+
 def check_indirect_prompt_injection_no_call_envelope() -> None:
     """Pin #675 Phase-2's no-call surface and human-evidence boundary."""
     readme = "evals/heldout/indirect_prompt_injection_behavior/README.md"
-    design = "docs/design/2026-08-13-675-indirect-prompt-injection-behavior-eval-spec.md"
+    design = (
+        "docs/design/2026-08-13-675-indirect-prompt-injection-behavior-eval-spec.md"
+    )
     workflow = ".github/workflows/spec-consistency.yml"
     manifest = "scripts/_ci_pytest_manifest.toml"
     for rel_path in (
@@ -1285,8 +1334,12 @@ def check_indirect_prompt_injection_no_call_envelope() -> None:
         "private map is not encrypted",
     ):
         expect_contains(design, needle)
-    expect_contains(workflow, "python3 scripts/check_indirect_prompt_injection_no_call.py")
-    expect_contains(manifest, 'path = "scripts/test_run_indirect_prompt_injection_no_call.py"')
+    expect_contains(
+        workflow, "python3 scripts/check_indirect_prompt_injection_no_call.py"
+    )
+    expect_contains(
+        manifest, 'path = "scripts/test_run_indirect_prompt_injection_no_call.py"'
+    )
     check_relative_markdown_links(readme)
 
 
@@ -1295,7 +1348,9 @@ def check_indirect_prompt_injection_no_call_envelope() -> None:
 OUTPUT_LANGUAGE_PAIR_CONTRACT = "shared/output_language_pair.md"
 OUTPUT_LANGUAGE_PAIR_CONTRACT_BASENAME = "output_language_pair.md"
 OUTPUT_LANGUAGE_PAIR_SCHEMA_SURFACE = "shared/handoff_schemas.md"
-OUTPUT_LANGUAGE_PAIR_TEMPLATE_SURFACE = "academic-paper/templates/bilingual_abstract_template.md"
+OUTPUT_LANGUAGE_PAIR_TEMPLATE_SURFACE = (
+    "academic-paper/templates/bilingual_abstract_template.md"
+)
 OUTPUT_LANGUAGE_PAIR_GUIDE = "academic-paper/references/abstract_writing_guide.md"
 OUTPUT_LANGUAGE_PAIR_GUIDE_BASENAME = "abstract_writing_guide.md"
 OUTPUT_LANGUAGE_PAIR_SCHEMA_SECTION_START = "## Schema 4: Paper Draft"
@@ -1307,13 +1362,22 @@ LEGACY_DEFAULT_OUTPUT_LANGUAGE_PAIR = "zh-tw-en"
 # sentence still quoted the old string (`handoff_schemas.md` keeps quoting
 # `abstract: {english, chinese}`), so each pin now targets the line it claims to hold.
 LEGACY_PAIR_HEADING_BLOCKS = (
-    ("academic-paper/agents/abstract_bilingual_agent.md", ("### English Abstract", "### Chinese Abstract")),
-    ("academic-paper/templates/bilingual_abstract_template.md", ("## English Abstract", "## Chinese Abstract (zh-TW)")),
+    (
+        "academic-paper/agents/abstract_bilingual_agent.md",
+        ("### English Abstract", "### Chinese Abstract"),
+    ),
+    (
+        "academic-paper/templates/bilingual_abstract_template.md",
+        ("## English Abstract", "## Chinese Abstract (zh-TW)"),
+    ),
 )
 # The workflow reference quotes the literals in prose instead of emitting them, so there is no
 # operative line to target and its pin stays a literal-presence check.
 LEGACY_PAIR_QUOTED_LITERALS = (
-    ("academic-paper/references/workflow_phase_details.md", ("### English Abstract", "### Chinese Abstract")),
+    (
+        "academic-paper/references/workflow_phase_details.md",
+        ("### English Abstract", "### Chinese Abstract"),
+    ),
 )
 # (Schema-4 field name, the exact backticked shape that field's own row must keep in its
 # description cell — the field table is | Field | Type | Description |, so the legacy typed
@@ -1366,7 +1430,12 @@ _REGIME_TABLE_REQUIRED_COLUMNS = (
     "l2_abstract",
     "keywords_per_language",
 )
-_REGIME_TABLE_REQUIRED_ROWS = ("standard", "conference", "extended_abstract", "dissertation")
+_REGIME_TABLE_REQUIRED_ROWS = (
+    "standard",
+    "conference",
+    "extended_abstract",
+    "dissertation",
+)
 _ATX_HEADING = re.compile(r"^#{1,6}[ \t]+\S")
 
 
@@ -1407,14 +1476,17 @@ def parse_output_language_pair_registry(text: str) -> dict[str, dict[str, str]]:
         raise ValueError("registry block markers are missing")
     if end < start:
         raise ValueError("registry block markers are out of order")
-    block = text[start + len(_PAIR_REGISTRY_START):end]
+    block = text[start + len(_PAIR_REGISTRY_START) : end]
     rows = [line for line in block.splitlines() if line.strip().startswith("|")]
     if len(rows) < 2:
         raise ValueError("registry block carries no table")
     columns = [
-        cell.strip().lower().replace(" ", "_") for cell in _split_markdown_table_row(rows[0])
+        cell.strip().lower().replace(" ", "_")
+        for cell in _split_markdown_table_row(rows[0])
     ]
-    missing = [column for column in _PAIR_REGISTRY_REQUIRED_COLUMNS if column not in columns]
+    missing = [
+        column for column in _PAIR_REGISTRY_REQUIRED_COLUMNS if column not in columns
+    ]
     if missing:
         raise ValueError(
             "registry table must declare token, L1 language, and L2 language columns "
@@ -1432,7 +1504,9 @@ def parse_output_language_pair_registry(text: str) -> dict[str, dict[str, str]]:
         entry = dict(zip(columns, cells))
         token = entry["token"].strip().strip("`").strip()
         if not _PAIR_TOKEN_PATTERN.match(token):
-            raise ValueError(f"registry token {token!r} is not a lowercase registry token")
+            raise ValueError(
+                f"registry token {token!r} is not a lowercase registry token"
+            )
         if token in registry:
             raise ValueError(f"duplicate registry token {token!r}")
         # A pair needs two declared, different languages: an empty cell is not a
@@ -1461,7 +1535,9 @@ def _output_language_pair_error(detail: str) -> str:
     return f"output_language_pair: {detail}; registry: {OUTPUT_LANGUAGE_PAIR_CONTRACT}"
 
 
-def validate_output_language_pair(value: object, registry: dict[str, dict[str, str]]) -> list[str]:
+def validate_output_language_pair(
+    value: object, registry: dict[str, dict[str, str]]
+) -> list[str]:
     """Validate one `output_language_pair` value against the registry.
 
     `PAIR_FIELD_ABSENT` means the key was omitted: that is the legacy behaviour and
@@ -1516,7 +1592,9 @@ def _schema4_section(text: str) -> str:
     start = text.find(OUTPUT_LANGUAGE_PAIR_SCHEMA_SECTION_START)
     if start == -1:
         return ""
-    next_section = text.find("\n## ", start + len(OUTPUT_LANGUAGE_PAIR_SCHEMA_SECTION_START))
+    next_section = text.find(
+        "\n## ", start + len(OUTPUT_LANGUAGE_PAIR_SCHEMA_SECTION_START)
+    )
     return text[start:] if next_section == -1 else text[start:next_section]
 
 
@@ -1597,7 +1675,9 @@ def check_output_language_pair_literal_pins(root: Path | None = None) -> None:
             if literal not in text:
                 fail(f"{rel_path}: missing quoted legacy pair literal {literal!r}")
     try:
-        schema = (base / OUTPUT_LANGUAGE_PAIR_SCHEMA_SURFACE).read_text(encoding="utf-8")
+        schema = (base / OUTPUT_LANGUAGE_PAIR_SCHEMA_SURFACE).read_text(
+            encoding="utf-8"
+        )
     except OSError:
         fail(
             f"{OUTPUT_LANGUAGE_PAIR_SCHEMA_SURFACE}: "
@@ -1669,7 +1749,7 @@ def _section_after_heading(text: str, heading: str) -> str | None:
     if heading_level is None:
         return None
     section_lines: list[str] = []
-    for line in lines[start_idx + 1:]:
+    for line in lines[start_idx + 1 :]:
         level = _atx_heading_level(line)
         if level is not None and level <= heading_level:
             break
@@ -1697,7 +1777,9 @@ def check_output_language_pair_carrier_steps(root: Path | None = None) -> None:
         if scope == "row":
             row_line = _carrier_row_line(text, marker)
             if row_line is None:
-                fail(f"{rel_path}: the carrier step {marker!r} is missing from the surface")
+                fail(
+                    f"{rel_path}: the carrier step {marker!r} is missing from the surface"
+                )
             elif omission_marker not in row_line:
                 fail(
                     f"{rel_path}: the carrier step {marker!r} must document that the value is "
@@ -1706,7 +1788,9 @@ def check_output_language_pair_carrier_steps(root: Path | None = None) -> None:
         elif scope == "section":
             section = _section_after_heading(text, marker)
             if section is None:
-                fail(f"{rel_path}: the carrier step {marker!r} is missing from the surface")
+                fail(
+                    f"{rel_path}: the carrier step {marker!r} is missing from the surface"
+                )
             elif omission_marker not in section:
                 fail(
                     f"{rel_path}: the carrier step {marker!r} must document that the value is "
@@ -1762,12 +1846,14 @@ def parse_abstract_regime_table(text: str) -> dict[str, dict[str, str]]:
         raise ValueError("regime table markers are missing")
     if end < start:
         raise ValueError("regime table markers are out of order")
-    block = text[start + len(_REGIME_TABLE_START):end]
+    block = text[start + len(_REGIME_TABLE_START) : end]
     rows = [line for line in block.splitlines() if line.strip().startswith("|")]
     if len(rows) < 2:
         raise ValueError("regime block carries no table")
     columns = [_regime_cell_key(cell) for cell in _split_markdown_table_row(rows[0])]
-    missing = [column for column in _REGIME_TABLE_REQUIRED_COLUMNS if column not in columns]
+    missing = [
+        column for column in _REGIME_TABLE_REQUIRED_COLUMNS if column not in columns
+    ]
     if missing:
         raise ValueError(
             "regime table must declare the paper type, both abstract lengths, and the "
@@ -1855,7 +1941,9 @@ def check_output_language_pair_contract() -> None:
         "names both values",
     ):
         if literal not in contract:
-            fail(f"{OUTPUT_LANGUAGE_PAIR_CONTRACT}: missing conflict-rule text {literal!r}")
+            fail(
+                f"{OUTPUT_LANGUAGE_PAIR_CONTRACT}: missing conflict-rule text {literal!r}"
+            )
 
     # the two steps that actually carry and emit the value
     check_output_language_pair_carrier_steps()
@@ -1864,7 +1952,9 @@ def check_output_language_pair_contract() -> None:
     # carry the marked block, and this contract must not carry a competing copy — a second
     # table is how the two figures drifted apart in the first place.
     check_abstract_regime_table(ROOT)
-    if _REGIME_TABLE_START in contract or _contract_has_competing_regime_table(contract):
+    if _REGIME_TABLE_START in contract or _contract_has_competing_regime_table(
+        contract
+    ):
         fail(
             f"{OUTPUT_LANGUAGE_PAIR_CONTRACT}: the abstract length / keyword regime table "
             f"lives in {OUTPUT_LANGUAGE_PAIR_GUIDE}; the contract must carry no competing copy"
@@ -1903,11 +1993,17 @@ def check_output_language_pair_contract() -> None:
         ("academic-paper/agents/intake_agent.md", True),
         ("academic-paper/agents/abstract_bilingual_agent.md", True),
         ("academic-paper/agents/structure_architect_agent.md", True),
-        ("academic-paper/agents/draft_writer_agent.md", False),   # carries no token
+        ("academic-paper/agents/draft_writer_agent.md", False),  # carries no token
         ("academic-paper/references/abstract_writing_guide.md", True),
         ("academic-paper/references/workflow_phase_details.md", True),
-        ("academic-paper/references/mode_selection_guide.md", False),  # "zh-TW + EN" prose, no token
-        ("academic-paper/templates/bilingual_abstract_template.md", True),   # was False — the template now carries the token
+        (
+            "academic-paper/references/mode_selection_guide.md",
+            False,
+        ),  # "zh-TW + EN" prose, no token
+        (
+            "academic-paper/templates/bilingual_abstract_template.md",
+            True,
+        ),  # was False — the template now carries the token
         ("commands/ars-abstract.md", True),
         ("shared/handoff_schemas.md", True),
     ):

@@ -17,6 +17,14 @@ TARGETS = {
         "plan", "outline", "revision", "revision-coach", "rebuttal-audit",
         "abstract", "lit-review", "format-convert", "citation-check", "disclosure",
     )},
+    "skripsi-full": "academic-pipeline",
+    "skripsi-proposal": "academic-paper",
+    "skripsi-matriks": "deep-research",
+    "skripsi-bab": "academic-paper",
+    "skripsi-defense": "academic-paper-reviewer",
+    "skripsi-citation": "academic-paper",
+    "skripsi-abstract": "academic-paper",
+    "skripsi-eyd": "academic-paper",
 }
 UTILITY_COMMANDS = {"ars-mark-read", "ars-unmark-read", "ars-cache-invalidate"}
 ROOT = "${CLAUDE_PLUGIN_ROOT}/"

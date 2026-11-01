@@ -46,6 +46,10 @@ MIRRORS = {
         "deep-research/agents/synthesis_agent.md",
     "agents/screening_reviewer_agent.md":
         "sr-screener/agents/screening_reviewer_agent.md",
+    "agents/pembimbing_agent.md":
+        "academic-paper/agents/pembimbing_agent.md",
+    "agents/penguji_agent.md":
+        "academic-paper-reviewer/agents/penguji_agent.md",
 }
 
 

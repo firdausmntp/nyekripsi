@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 """Pin #611's public Journal-Fit Reviewer name and frozen eic/EIC tokens."""
+
 from __future__ import annotations
 
 import argparse
@@ -50,12 +51,8 @@ REQUIRED = {
         "full mode (Journal-Fit Reviewer + R1/R2/R3 + Devil's Advocate)",
         "Fronteira entre o painel da primeira rodada e o acionamento da re-revisão regido por contrato",
     ),
-    "MODE_REGISTRY.md": (
-        "Journal-Fit Reviewer quick assessment + key issues list",
-    ),
-    "shared/mode_spectrum.md": (
-        "Fixed Journal-Fit Reviewer quick-assessment format",
-    ),
+    "MODE_REGISTRY.md": ("Journal-Fit Reviewer quick assessment + key issues list",),
+    "shared/mode_spectrum.md": ("Fixed Journal-Fit Reviewer quick-assessment format",),
     "academic-paper-reviewer/SKILL.md": (
         "the public display name is **Journal-Fit Reviewer**",
         "`eic_agent` (agent), `eic` (`contract_role` / dispatch role), and `EIC`",
@@ -221,9 +218,7 @@ REQUIRED = {
         "a blind and separately executed Devil's Advocate critique",
         "These execution facts are not a binary independence claim",
     ),
-    "docs/SETUP.md": (
-        "Cross-model generates a blind, separately executed critique",
-    ),
+    "docs/SETUP.md": ("Cross-model generates a blind, separately executed critique",),
     "deep-research/agents/devils_advocate_agent.md": (
         "a blind, separately executed critique",
         "Blinding and separate execution are typed facts, not proof of independent errors",
@@ -353,9 +348,7 @@ FORBIDDEN_DISPLAY = {
 # non-DA consensus denominator. Role separation and blinding are typed axes;
 # neither licenses a binary "independent reports" claim.
 FORBIDDEN_PANEL_LANGUAGE = {
-    "academic-paper-reviewer/SKILL.md": (
-        "dynamically configures 5 reviewers",
-    ),
+    "academic-paper-reviewer/SKILL.md": ("dynamically configures 5 reviewers",),
     "academic-paper-reviewer/agents/editorial_synthesizer_agent.md": (
         "Based on the 4 reports",
     ),
@@ -382,7 +375,9 @@ FORBIDDEN_PANEL_LANGUAGE = {
 FORBIDDEN_BINARY_INDEPENDENCE = {
     ".claude/CLAUDE.md": ("independent Devil's Advocate critique",),
     "docs/SETUP.md": ("Cross-model generates independent critique",),
-    "deep-research/agents/devils_advocate_agent.md": ("needed for an independent critique",),
+    "deep-research/agents/devils_advocate_agent.md": (
+        "needed for an independent critique",
+    ),
     "shared/handoff_schemas.md": ("the independent pass evaluates",),
     "shared/cross_model_verification.md": ("independent-DA-critique prompt",),
 }
@@ -390,8 +385,18 @@ FORBIDDEN_BINARY_INDEPENDENCE = {
 
 def check(root: Path) -> list[str]:
     errors: list[str] = []
-    texts = {rel: read_or_exit2(root, rel) for rel in REQUIRED}
+    texts = {
+        rel: read_or_exit2(root, rel)
+        for rel in set(REQUIRED)
+        | set(FORBIDDEN_DISPLAY)
+        | set(FORBIDDEN_REVIEW_DISPATCH)
+        | set(FORBIDDEN_PANEL_LANGUAGE)
+        | set(FORBIDDEN_BINARY_INDEPENDENCE)
+        if (root / rel).exists()
+    }
     for rel, needles in REQUIRED.items():
+        if rel not in texts:
+            continue
         text = texts[rel]
         for needle in needles:
             if needle not in text:
@@ -412,11 +417,17 @@ def check(root: Path) -> list[str]:
                 )
                 errors.append(f"{rel}: {kind}; missing {needle!r}")
     for rel, needles in FORBIDDEN_DISPLAY.items():
+        if rel not in texts:
+            continue
         text = texts[rel]
         for needle in needles:
             if needle in text:
-                errors.append(f"{rel}: display-label drift; legacy display {needle!r} remains")
+                errors.append(
+                    f"{rel}: display-label drift; legacy display {needle!r} remains"
+                )
     for rel, needles in FORBIDDEN_REVIEW_DISPATCH.items():
+        if rel not in texts:
+            continue
         text = texts[rel]
         for needle in needles:
             if needle in text:
@@ -424,6 +435,8 @@ def check(root: Path) -> list[str]:
                     f"{rel}: re-review dispatch drift; fixed-agent roster {needle!r} remains"
                 )
     for rel, needles in FORBIDDEN_PANEL_LANGUAGE.items():
+        if rel not in texts:
+            continue
         text = texts[rel]
         for needle in needles:
             if needle in text:
@@ -431,6 +444,8 @@ def check(root: Path) -> list[str]:
                     f"{rel}: panel-cardinality/provenance drift; stale phrase {needle!r} remains"
                 )
     for rel, needles in FORBIDDEN_BINARY_INDEPENDENCE.items():
+        if rel not in texts:
+            continue
         text = texts[rel]
         for needle in needles:
             if needle in text:
@@ -449,7 +464,9 @@ def main() -> int:
         for error in errors:
             print(f"ERROR: {error}", file=sys.stderr)
         return 1
-    print("reviewer role label: Journal-Fit Reviewer public; eic/EIC compatibility frozen")
+    print(
+        "reviewer role label: Journal-Fit Reviewer public; eic/EIC compatibility frozen"
+    )
     return 0
 
 

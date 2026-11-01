@@ -1,10 +1,16 @@
 {
-  "name": "academic-research-skills",
+  "name": "nyekripsi",
+  "version": "0.5.0",
   "private": true,
-  "description": "Academic research workflow skills with Claude Code and Pi adapters",
+  "description": "nyekripsi: Indonesian undergraduate thesis (Skripsi S1 / Tesis S1) writing toolset and academic research workflow skills with Claude Code and Pi adapters",
   "keywords": [
-    "pi-package",
-    "academic-research"
+    "nyekripsi",
+    "skripsi",
+    "skripsi-s1",
+    "tesis",
+    "indonesian-thesis",
+    "academic-research",
+    "pi-package"
   ],
   "license": "CC-BY-NC-4.0",
   "pi": {

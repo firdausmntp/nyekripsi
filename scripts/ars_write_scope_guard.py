@@ -87,9 +87,8 @@ INSPECTED_TOOLS = STRUCTURED_WRITE_TOOLS | {"Bash"}
 
 # Claude Code reports an agent shipped by a plugin as "<plugin name>:<agent name>" (#971).
 # Only THIS plugin's prefix is stripped: another plugin's agent that happens to share a
-# manifest name is not an ARS agent and stays out of the fence. Pinned to the `name` in
-# .claude-plugin/plugin.json by the guard tests.
 PLUGIN_AGENT_NAMESPACE = "academic-research-skills:"
+SECONDARY_PLUGIN_AGENT_NAMESPACES = ("nyekripsi:",)
 
 # Step 2 infrastructure self-protection — normalized workspace-relative path patterns
 # that NO agent (and not even the unconstrained main session) may write. These are the
@@ -294,10 +293,14 @@ def _infra_protected_target(raw_path, cwd, plugin_root):
 
 def _manifest_key(agent_type):
     """The manifest key for a payload agent_type: this plugin's scoped identifier
-    ("academic-research-skills:synthesis_agent") maps to the bare name the manifest keys
-    ("synthesis_agent"); anything else is returned unchanged (#971)."""
-    if isinstance(agent_type, str) and agent_type.startswith(PLUGIN_AGENT_NAMESPACE):
-        return agent_type[len(PLUGIN_AGENT_NAMESPACE):]
+    ("academic-research-skills:synthesis_agent" or "nyekripsi:synthesis_agent") maps to
+    the bare name the manifest keys ("synthesis_agent"); anything else is returned unchanged (#971)."""
+    if isinstance(agent_type, str):
+        if agent_type.startswith(PLUGIN_AGENT_NAMESPACE):
+            return agent_type[len(PLUGIN_AGENT_NAMESPACE):]
+        for ns in SECONDARY_PLUGIN_AGENT_NAMESPACES:
+            if agent_type.startswith(ns):
+                return agent_type[len(ns):]
     return agent_type
 
 

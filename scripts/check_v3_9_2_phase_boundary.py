@@ -84,8 +84,8 @@ BUCKET_A_AGENTS = [
     "academic-paper-reviewer/agents/editorial_synthesizer_agent.md",
 ]
 
-# Buckets B/C/D — 20 agents that MUST NOT have the block.
-# B (4): multi-phase; C (12): phase-orthogonal (8 + sr-screener's 4); D (4): cross-phase-meta.
+# Buckets B/C/D — 22 agents that MUST NOT have the block.
+# B (4): multi-phase; C (14): phase-orthogonal (8 + sr-screener's 4 + nyekripsi's 2); D (4): cross-phase-meta.
 BUCKET_BCD_AGENTS = [
     # Bucket B — multi-phase (4)
     "deep-research/agents/devils_advocate_agent.md",          # P1, 3, 5 + Socratic L2, 4
@@ -107,6 +107,9 @@ BUCKET_BCD_AGENTS = [
     "sr-screener/agents/screening_reviewer_agent.md",         # screening Phases 2-5, read-only subagent
     "sr-screener/agents/qc_auditor_agent.md",                 # screening Phases 2 and 5, main session
     "sr-screener/agents/reporter_agent.md",                   # screening Phase 6, main session
+    # Bucket C — nyekripsi (2): undergraduate thesis advising & examination
+    "academic-paper/agents/pembimbing_agent.md",              # formative advisor
+    "academic-paper-reviewer/agents/penguji_agent.md",        # defense examiner
     # Bucket D — cross-phase / meta (4)
     "academic-paper/agents/intake_agent.md",                  # Phase 0 cross-phase config
     "academic-pipeline/agents/pipeline_orchestrator_agent.md",  # orchestrator
@@ -258,10 +261,10 @@ def main() -> int:
             f"BUCKET_A_AGENTS has {len(BUCKET_A_AGENTS)} entries but "
             f"classification doc requires 23 (v3.9.4 added timeline_extraction_agent)"
         )
-    if len(BUCKET_BCD_AGENTS) != 20:
+    if len(BUCKET_BCD_AGENTS) != 22:
         errors.append(
             f"BUCKET_BCD_AGENTS has {len(BUCKET_BCD_AGENTS)} entries but "
-            f"classification doc requires 20 (sr-screener added 4 Bucket C agents)"
+            f"classification doc requires 22 (sr-screener added 4, nyekripsi added 2)"
         )
 
     if errors:

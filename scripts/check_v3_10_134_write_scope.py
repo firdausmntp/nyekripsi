@@ -75,7 +75,7 @@ BUCKET_A_AGENT_FILES = [
     "academic-paper-reviewer/agents/editorial_synthesizer_agent.md",
 ]
 
-# The 20 Bucket B/C/D agents that MUST NOT appear in the manifest.
+# The 22 Bucket B/C/D agents that MUST NOT appear in the manifest.
 BUCKET_BCD_AGENT_FILES = [
     "deep-research/agents/devils_advocate_agent.md",
     "deep-research/agents/report_compiler_agent.md",
@@ -98,6 +98,9 @@ BUCKET_BCD_AGENT_FILES = [
     "sr-screener/agents/screening_reviewer_agent.md",
     "sr-screener/agents/qc_auditor_agent.md",
     "sr-screener/agents/reporter_agent.md",
+    # Bucket C — nyekripsi personas (cross-phase / phase-orthogonal)
+    "academic-paper/agents/pembimbing_agent.md",
+    "academic-paper-reviewer/agents/penguji_agent.md",
 ]
 
 # Plugin-root agents/ mirrors whose source is NOT deep-research/agents/<same name>.
@@ -105,6 +108,8 @@ BUCKET_BCD_AGENT_FILES = [
 # here still maps to deep-research/agents/ and fails closed when unrostered.
 MIRROR_SOURCE_OVERRIDES = {
     "screening_reviewer_agent.md": "sr-screener/agents/screening_reviewer_agent.md",
+    "pembimbing_agent.md": "academic-paper/agents/pembimbing_agent.md",
+    "penguji_agent.md": "academic-paper-reviewer/agents/penguji_agent.md",
 }
 
 _NAME_RE = re.compile(r"^name:\s*(.+?)\s*$", re.MULTILINE)
@@ -155,9 +160,9 @@ def run_checks() -> list[str]:
             f"I1: BUCKET_A_AGENT_FILES has {len(BUCKET_A_AGENT_FILES)} entries, expected 23 "
             "(classification doc: A=23). Update in lockstep with check_v3_9_2_phase_boundary.py."
         )
-    if len(BUCKET_BCD_AGENT_FILES) != 20:
+    if len(BUCKET_BCD_AGENT_FILES) != 22:
         errors.append(
-            f"I1: BUCKET_BCD_AGENT_FILES has {len(BUCKET_BCD_AGENT_FILES)} entries, expected 20."
+            f"I1: BUCKET_BCD_AGENT_FILES has {len(BUCKET_BCD_AGENT_FILES)} entries, expected 22."
         )
 
     # I5 — roster exhaustiveness (NON-VACUOUS guard). Glob the actual filesystem for every

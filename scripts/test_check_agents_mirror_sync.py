@@ -126,17 +126,27 @@ def test_missing_source_fails(tmp_path):
 
 # --- roster shape ---------------------------------------------------------------
 
-def test_roster_is_the_four_plugin_agents():
+def test_roster_is_the_six_plugin_agents():
     # v3.7.0 Phase 2.1 shipped the three deep-research agents; sr-screener
-    # added its reviewer subagent. A roster edit is a deliberate
-    # plugin-surface change, not drift.
+    # added its reviewer subagent; nyekripsi added pembimbing & penguji.
+    # A roster edit is a deliberate plugin-surface change, not drift.
     assert set(MIRRORS) == {
         "agents/report_compiler_agent.md",
         "agents/research_architect_agent.md",
         "agents/synthesis_agent.md",
         "agents/screening_reviewer_agent.md",
+        "agents/pembimbing_agent.md",
+        "agents/penguji_agent.md",
     }
     assert MIRRORS["agents/screening_reviewer_agent.md"] == (
         "sr-screener/agents/screening_reviewer_agent.md")
+    assert MIRRORS["agents/pembimbing_agent.md"] == (
+        "academic-paper/agents/pembimbing_agent.md")
+    assert MIRRORS["agents/penguji_agent.md"] == (
+        "academic-paper-reviewer/agents/penguji_agent.md")
     assert all(s.startswith("deep-research/agents/") for m, s in MIRRORS.items()
-               if m != "agents/screening_reviewer_agent.md")
+               if m not in {
+                   "agents/screening_reviewer_agent.md",
+                   "agents/pembimbing_agent.md",
+                   "agents/penguji_agent.md",
+               })

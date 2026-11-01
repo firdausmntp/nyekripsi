@@ -21,6 +21,7 @@ with different declarations — not the same pair reversed.
 | Token | L1 language | L1 script | L2 language | L2 script | Status |
 |-------|-------------|-----------|-------------|-----------|--------|
 | `zh-tw-en` | Traditional Chinese (`zh-TW`) | CJK | English (`en`) | Latin | default |
+| `id-en` | Indonesian (`id`) | Latin | English (`en`) | Latin | supported |
 <!-- output-language-pair-registry:end -->
 
 - **Two-language entries only.** The Phase-1 registry holds pair entries and nothing else.

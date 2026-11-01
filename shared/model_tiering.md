@@ -63,13 +63,13 @@ When a tiering direction is active, route repeated same-stage calls to the SAME 
 
 One tier per agent; membership changes require editing BOTH this table and `scripts/model_tiering_manifest.json` (the lint pins them together).
 
-### Judgment-type (29) — session model; quality-boost upgrade candidates at checkpoint surfaces
+### Judgment-type (31) — session model; quality-boost upgrade candidates at checkpoint surfaces
 
 | Skill | Agents |
 |---|---|
 | deep-research (10) | `socratic_mentor`, `research_question`, `research_architect`, `synthesis`, `devils_advocate`, `editor_in_chief`, `ethics_review`, `risk_of_bias`, `meta_analysis`, `source_verification` |
-| academic-paper (6) | `socratic_mentor`, `argument_builder`, `structure_architect`, `peer_reviewer`, `revision_coach`, `literature_strategist` |
-| academic-paper-reviewer (6) | `eic`, `methodology_reviewer`, `domain_reviewer`, `perspective_reviewer`, `devils_advocate_reviewer`, `editorial_synthesizer` (mechanical by v3.6.2 design but emits the final decision letter — judgment-type conservatively until data says otherwise) |
+| academic-paper (7) | `socratic_mentor`, `argument_builder`, `structure_architect`, `peer_reviewer`, `revision_coach`, `literature_strategist`, `pembimbing` |
+| academic-paper-reviewer (7) | `eic`, `methodology_reviewer`, `domain_reviewer`, `perspective_reviewer`, `devils_advocate_reviewer`, `editorial_synthesizer` (mechanical by v3.6.2 design but emits the final decision letter — judgment-type conservatively until data says otherwise), `penguji` |
 | academic-pipeline (3) | `pipeline_orchestrator`, `claim_ref_alignment_audit`, `integrity_verification` |
 | shared (1) | `compliance` (holds tier-based block authority) |
 | sr-screener (3) | `protocol_architect`, `screening_reviewer` (screening calls take per-role models from the screening config; see the note below), `qc_auditor` |

@@ -55,7 +55,7 @@ fi
 SYSTEM_MSG=""
 case "${SOURCE}" in
   compact|resume)
-    ANNOUNCE="ARS plugin still loaded after ${SOURCE}. Slash commands: /ars-full /ars-plan /ars-outline /ars-revision /ars-revision-coach /ars-rebuttal-audit /ars-abstract /ars-lit-review /ars-3w /ars-reviewer /ars-format-convert /ars-citation-check /ars-disclosure /ars-mark-read /ars-unmark-read /ars-cache-invalidate. Plugin agents: synthesis_agent, research_architect_agent, report_compiler_agent, screening_reviewer_agent. If an ARS pipeline run is in progress, run its handoff check before continuing (academic-pipeline orchestrator, section Run ledger and handoff check, #887): compare what the session now shows with the run ledger beside the Material Passport, and ask again for any decision it cannot show in the user's words."
+    ANNOUNCE="nyekripsi / ARS plugin still loaded after ${SOURCE}. Slash commands: /ars-full /ars-plan /ars-outline /ars-revision /ars-revision-coach /ars-rebuttal-audit /ars-abstract /ars-lit-review /ars-3w /ars-reviewer /ars-format-convert /ars-citation-check /ars-disclosure /ars-mark-read /ars-unmark-read /ars-cache-invalidate /skripsi-full /skripsi-proposal /skripsi-matriks /skripsi-bab /skripsi-defense /skripsi-citation /skripsi-abstract /skripsi-eyd. Plugin agents: synthesis_agent, research_architect_agent, report_compiler_agent, screening_reviewer_agent, pembimbing_agent, penguji_agent. If an ARS pipeline run is in progress, run its handoff check before continuing (academic-pipeline orchestrator, section Run ledger and handoff check, #887): compare what the session now shows with the run ledger beside the Material Passport, and ask again for any decision it cannot show in the user's words."
     ;;
   startup|clear|*)
     # -----------------------------------------------------------------
@@ -81,13 +81,13 @@ case "${SOURCE}" in
     # The model gets the command and agent names only; the lint in
     # .command-invariants.toml still checks every /ars-* token and the count.
     if [[ -n "${UPDATE_LINE}" ]]; then
-      SYSTEM_MSG="${UPDATE_LINE}ARS (academic-research-skills) loaded. Its slash commands start with /ars-."
+      SYSTEM_MSG="${UPDATE_LINE}nyekripsi / ARS (academic-research-skills) loaded. Its slash commands start with /ars-."
     fi
-    ANNOUNCE="${UPDATE_LINE}ARS (academic-research-skills) plugin loaded.
+    ANNOUNCE="${UPDATE_LINE}nyekripsi / ARS (academic-research-skills) plugin loaded.
 
-Slash commands (16): /ars-full /ars-plan /ars-outline /ars-revision /ars-revision-coach /ars-rebuttal-audit /ars-abstract /ars-lit-review /ars-3w /ars-reviewer /ars-format-convert /ars-citation-check /ars-disclosure /ars-mark-read /ars-unmark-read /ars-cache-invalidate.
+Slash commands (24): /ars-full /ars-plan /ars-outline /ars-revision /ars-revision-coach /ars-rebuttal-audit /ars-abstract /ars-lit-review /ars-3w /ars-reviewer /ars-format-convert /ars-citation-check /ars-disclosure /ars-mark-read /ars-unmark-read /ars-cache-invalidate /skripsi-full /skripsi-proposal /skripsi-matriks /skripsi-bab /skripsi-defense /skripsi-citation /skripsi-abstract /skripsi-eyd.
 
-Plugin agents (model: inherit): synthesis_agent, research_architect_agent, report_compiler_agent, screening_reviewer_agent."
+Plugin agents (model: inherit): synthesis_agent, research_architect_agent, report_compiler_agent, screening_reviewer_agent, pembimbing_agent, penguji_agent."
     ;;
 esac
 

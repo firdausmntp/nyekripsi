@@ -47,6 +47,7 @@ nothing else performs at tag time. Wired via tag-version-match.yml.
 
 Runs from repo root by default; `--path` lets tests point at a fake tree.
 """
+
 from __future__ import annotations
 
 import argparse
@@ -72,7 +73,9 @@ SUITE_TOKEN_RE = re.compile(
     r"^\s*-\s*\*\*Suite version\*\*:\s*([A-Za-z0-9.\-_+]+)", re.MULTILINE
 )
 CHANGELOG_TOKEN_RE = re.compile(r"^##\s*\[([A-Za-z0-9.\-_+]+)\]", re.MULTILINE)
-SEMVER_STRICT_RE = re.compile(r"^\d+(?:\.\d+){2,3}$")  # exactly 3 or 4 segments (N.N.N or N.N.N.N)
+SEMVER_STRICT_RE = re.compile(
+    r"^\d+(?:\.\d+){2,3}$"
+)  # exactly 3 or 4 segments (N.N.N or N.N.N.N)
 
 # Invariant 5: shields.io version badge label, e.g. `badge/version-v3.11.1-blue`.
 # `_VSEG` = 3-or-4 numeric segments. The trailing `(?!\.?\d)` stops a 5th
@@ -116,9 +119,7 @@ CHANGELOG_BODY_MIN_CHARS = 100
 # as `2026-04-22`, codex re-review P3); the day field then fails the strict
 # ISO gate downstream.
 CHANGELOG_DATE_RE = re.compile(r"\]\s*-\s*(\d{4}-\d{2}-\d{2})(?!\d)")
-LAST_UPDATED_RE = re.compile(
-    r"^\s*-\s*\*\*Last Updated\*\*:\s*(\S+)", re.MULTILINE
-)
+LAST_UPDATED_RE = re.compile(r"^\s*-\s*\*\*Last Updated\*\*:\s*(\S+)", re.MULTILINE)
 LAST_UPDATED_MAX_DAYS = 7
 # Invariant 11: a version-tagged Key Additions H2, e.g. `## v3.14 Key
 # Additions (...)`. 2-4 segments — headings cite major.minor or a full patch.
@@ -234,7 +235,7 @@ def _parse_changelog_latest(
         line_end = changelog_text.find("\n", m.end())
         if line_end == -1:
             line_end = len(changelog_text)
-        heading_line = changelog_text[m.start():line_end]
+        heading_line = changelog_text[m.start() : line_end]
         date_m = CHANGELOG_DATE_RE.search(heading_line)
         body = changelog_text[line_end : _next_entry_offset(changelog_text, line_end)]
         return raw, None, date_m.group(1) if date_m else None, body
@@ -276,8 +277,7 @@ def check(root: Path, tag: str | None = None) -> list[str]:
     table_versions, invalid_table_rows = _parse_table_versions(claude_text)
     if not table_versions and not invalid_table_rows:
         errors.append(
-            f"{claude_md}: Skills Overview table has no parseable "
-            "`<skill>` vX.Y.Z rows"
+            f"{claude_md}: Skills Overview table has no parseable `<skill>` vX.Y.Z rows"
         )
     for skill, raw in invalid_table_rows:
         errors.append(
@@ -287,9 +287,7 @@ def check(root: Path, tag: str | None = None) -> list[str]:
 
     suite_version, invalid_suite_token = _parse_suite_version(claude_text)
     if suite_version is None and invalid_suite_token is None:
-        errors.append(
-            f"{claude_md}: missing '**Suite version**: X.Y.Z' line"
-        )
+        errors.append(f"{claude_md}: missing '**Suite version**: X.Y.Z' line")
     elif invalid_suite_token is not None:
         errors.append(
             f"{claude_md}: Suite version token {invalid_suite_token!r} is "
@@ -302,8 +300,8 @@ def check(root: Path, tag: str | None = None) -> list[str]:
     if not changelog.is_file():
         errors.append(f"{changelog}: not found")
     else:
-        latest, invalid_latest, latest_date, latest_body = (
-            _parse_changelog_latest(changelog.read_text(encoding="utf-8"))
+        latest, invalid_latest, latest_date, latest_body = _parse_changelog_latest(
+            changelog.read_text(encoding="utf-8")
         )
         if latest is None and invalid_latest is None:
             errors.append(f"{changelog}: no '## [X.Y.Z]' entry found")
@@ -459,7 +457,11 @@ def _check_plugin_manifests(root: Path, suite_version: str) -> list[str]:
                 errors.append(f"{marketplace}: 'plugins' is missing or empty")
             else:
                 for i, entry in enumerate(plugins):
-                    v = (entry or {}).get("version") if isinstance(entry, dict) else None
+                    v = (
+                        (entry or {}).get("version")
+                        if isinstance(entry, dict)
+                        else None
+                    )
                     if v is None:
                         errors.append(
                             f"{marketplace}: plugins[{i}] missing 'version' key"
@@ -590,15 +592,11 @@ def _check_last_updated_freshness(
     the lint re-runs."""
     m = LAST_UPDATED_RE.search(claude_text)
     if m is None:
-        return [
-            f"{claude_md}: missing '- **Last Updated**: YYYY-MM-DD' line"
-        ]
+        return [f"{claude_md}: missing '- **Last Updated**: YYYY-MM-DD' line"]
     raw = m.group(1)
     last_updated = _parse_iso_date(raw)
     if last_updated is None:
-        return [
-            f"{claude_md}: Last Updated {raw!r} is not a valid YYYY-MM-DD date"
-        ]
+        return [f"{claude_md}: Last Updated {raw!r} is not a valid YYYY-MM-DD date"]
     if latest_date is None:
         return [
             f"{changelog}: latest entry has no '- YYYY-MM-DD' date — cannot "
@@ -671,12 +669,15 @@ def _check_agent_count_claim(root: Path) -> list[str]:
     claims = [int(m.group(1)) for m in AGENT_CLAIM_RE.finditer(description)]
     if not claims:
         return []
-    actual = len({
-        p.resolve()
-        for p in root.rglob("*_agent.md")
-        if ".git" not in p.parts
-        and p.relative_to(root).parts[0] != "agents"  # plugin-root mirror = aliases (#413)
-    })
+    actual = len(
+        {
+            p.resolve()
+            for p in root.rglob("*_agent.md")
+            if ".git" not in p.parts
+            and p.relative_to(root).parts[0]
+            != "agents"  # plugin-root mirror = aliases (#413)
+        }
+    )
     return [
         f"{plugin_json}: description claims an agent count of {claimed} "
         f"but the tree has {actual} unique *_agent.md files (agents/ "
@@ -768,8 +769,7 @@ def _check_citation_surfaces(
                         "strict YYYY-MM-DD date"
                     )
                 elif (
-                    base is not None
-                    and abs((rel - base).days) > LAST_UPDATED_MAX_DAYS
+                    base is not None and abs((rel - base).days) > LAST_UPDATED_MAX_DAYS
                 ):
                     errors.append(
                         f"{cff}: date-released {rel.isoformat()} is more than "
