@@ -1,22 +1,103 @@
-# Academic Research Skills for Claude Code
+# nyekripsi — Indonesian Thesis (Skripsi S1) Toolkit & Academic Research Skills
+
+<p align="center">
+  <img src="docs/nyekripsi-icon.svg" alt="nyekripsi icon" width="100" height="100">
+</p>
 
 [![Version](https://img.shields.io/badge/version-v3.24.0-blue)](https://github.com/Imbad0202/academic-research-skills/releases/tag/v3.24.0)
+[![Release](https://img.shields.io/badge/nyekripsi-v0.5.0-emerald)](https://github.com/firdausmntp/nyekripsi)
 [![DOI](https://img.shields.io/badge/DOI-10.5281%2Fzenodo.20696614-blue)](https://doi.org/10.5281/zenodo.20696614)
 [![License: CC BY-NC 4.0](https://img.shields.io/badge/license-CC%20BY--NC%204.0-lightgrey)](https://creativecommons.org/licenses/by-nc/4.0/)
-[![Sponsor](https://img.shields.io/badge/sponsor-Buy%20Me%20a%20Coffee-orange?logo=buy-me-a-coffee)](https://buymeacoffee.com/crucify020v)
+[![Upstream](https://img.shields.io/badge/fork%20of-academic--research--skills-orange)](https://github.com/Imbad0202/academic-research-skills)
 
-[简体中文版](README.zh-CN.md) | [繁體中文版](README.zh-TW.md) | [日本語版](README.ja-JP.md) | [한국어](README.ko-KR.md) | [Español](README.es-ES.md) | [Português](README.pt-BR.md)
+> **Catatan Fork:** Repositori ini merupakan fork dari `academic-research-skills` (ARS) yang difokuskan dan dispesialisasikan untuk pengerjaan **Skripsi S1 / Tesis S1 di Indonesia**, dengan tetap mempertahankan kompatibilitas penuh terhadap pipeline riset akademik ARS (`/ars-*`).
 
-A comprehensive suite of Claude Code skills for academic research, covering the full pipeline from research to publication.
+[Bahasa Indonesia (Utama)](#alur-kerja-skripsi-s1-indonesia) | [English Documentation](#features-at-a-glance)
 
-**Install in 30 seconds** (Claude Code CLI / VS Code / JetBrains, v3.7.0+):
+**nyekripsi** adalah toolkit komprehensif untuk penyusunan Skripsi/Tesis S1 di perguruan tinggi Indonesia (Kuantitatif, Kualitatif, dan Teknik Informatika/Sistem Informasi/R&D), dengan integrasi AI berbasis asistensi terbimbing (*human-in-the-loop*), kepatuhan tata bahasa EYD V, format sitasi (APA 7th & IEEE), serta pengawalan pembimbingan dan ujian sidang.
 
-```text
-/plugin marketplace add Imbad0202/academic-research-skills
-/plugin install academic-research-skills
-```
+---
 
-Then try `/ars-plan` to walk through your paper structure via Socratic dialogue, or jump to [Quick install](#quick-install) for prerequisites and the traditional symlink flow.
+## Alur Kerja Skripsi S1 Indonesia
+
+### 1. Dual Pembimbingan Formatif (`/skripsi-proposal`, `/skripsi-bab`)
+- **Dosen Pembimbing 1 (Substansi & Teori)**:
+  - Penegasan batas **Objek Material** (fenomena/domain empiris) dan **Objek Formal** (sudut pandang/teori/algoritma).
+  - Latar Belakang Masalah dengan struktur ketat alinea identifikasi masalah diawali frasa baku *"terdapat..."*.
+  - 3 Rumusan Masalah terarah berkorespondensi dengan 3 Tujuan Penelitian.
+  - Kajian Teori 3 Level: *Grand Theory* -> *Middle-Range Theory* -> *Applied/Operational Theory* (pisau analisis).
+- **Dosen Pembimbing 2 (Metodologi, Teknis & Tata Bahasa)**:
+  - Instrumen metodologi (operasionalisasi variabel, validitas reliabilitas, atau SDLC / Software Engineering lifecycle).
+  - Visualisasi alur kerangka berpikir dan arsitektur sistem berbasis diagram **Mermaid**.
+  - Standardisasi bahasa akademik baku berpedoman pada **EYD V** (struktur SPOK, penghapusan frasa klise "di mana", distingsi prefiks `di-` dan preposisi `di `).
+
+### 2. Matriks Penelitian Terdahulu 13 Kolom (`/skripsi-matriks`)
+Deep literature review artikel jurnal ilmiah mutakhir format 13 kolom standar:
+1. No
+2. Peneliti & Tahun
+3. Judul Artikel
+4. Nama Jurnal / Konferensi & Indeksasi (Sinta / Scopus)
+5. Objek Material
+6. Objek Formal / Landasan Teori
+7. Metodologi & Desain Penelitian
+8. Sampel / Data / Unit Analisis
+9. Variabel / Parameter Penelitian
+10. Hasil & Temuan Utama
+11. Kelebihan / Kontribusi
+12. Keterbatasan / Weakness
+13. Posisi Kebaruan Penelitian Skripsi Anda (*State-of-the-Art & Gap Analysis*)
+
+Dapat dikonfigurasi fleksibel (5, 10, 15, hingga 20+ artikel jurnal).
+
+### 3. Audit Sitasi & Kemutakhiran (`/skripsi-citation`)
+- Dukungan multi-style: **APA 6th/7th** (Author-Date) & **IEEE** (Numeric [1], [2]).
+- Evaluasi matematis rasio kemutakhiran: **minimal 80%** referensi berasal dari artikel jurnal ilmiah bereputasi terbitan 3–5 tahun terakhir.
+- *Grandfathering rule*: Alokasi maksimal 20% untuk buku rujukan induk / *seminal classic works*.
+- **100% Anti-Phantom Citation Guarantee**: Audit dua arah (*forward audit* mencocokkan setiap sitasi dalam teks ke daftar pustaka; *reverse audit* mencegah entri hantu yang tak pernah dikutip).
+
+### 4. Abstrak Bilingual Terstruktur 5 Kalimat (`/skripsi-abstract`)
+Format ringkas padat 5 alur logis:
+1. Kalimat 1: Latar belakang & urgensi masalah.
+2. Kalimat 2: Tujuan utama penelitian.
+3. Kalimat 3: Metodologi yang digunakan.
+4. Kalimat 4: Temuan/hasil utama.
+5. Kalimat 5: Implikasi teoritis/praktis.
+Disertai kata kunci (*keywords*) tersortir alfabetis (Bahasa Indonesia & English).
+
+### 5. Simulasi Ujian Sidang Skripsi (`/skripsi-defense`)
+- Simulasi bersama **Majelis Dewan Penguji** (Ketua & Anggota Penguji).
+- Rubrik penilaian 5 dimensi: Penguasaan Materi (30%), Metodologi & Data (25%), Kualitas Argumen & Solusi (20%), Tata Tulis & EYD (15%), Kemampuan Presentasi & Respon (10%).
+- Keputusan sidang resmi: *Lulus Tanpa Revisi*, *Lulus Revisi Minor*, *Lulus Revisi Mayor*, *Mengulang Sidang*.
+- Penerbitan draf Berita Acara Ujian Sidang Skripsi & Matriks Revisi Pasca-Sidang.
+
+### 6. Fleksibilitas Fakultas & Intake Pedoman Kampus (`/skripsi-full`)
+- Preset metodologi lintas rumpun ilmu:
+  - `it-software`: Agile, Scrum, Waterfall, Prototyping, IEEE citation, arsitektur sistem.
+  - `sosial-humaniora`: Studi kasus, deskriptif analitis, analisis wacana, APA style.
+  - `ekonomi-bisnis`: Ekonometrika, regresi linear/berganda, uji asumsi klasik.
+  - `hukum`: Penelitian hukum normatif (studi kepustakaan UU) & empiris (yuridis empiris).
+  - `pendidikan-r&d`: Model ADDIE, 4D, Penelitian Tindakan Kelas (PTK).
+  - `kesehatan-sains`: Kuantitatif observasional/eksperimental, ethical clearance.
+- CLI Intake pedoman kampus: `python scripts/custom_toc_intake.py --guideline <path>` untuk menyesuaikan struktur bab persis sesuai buku pedoman skripsi universitas Anda.
+
+---
+
+## Perintah Perintah Nyekripsi
+
+| Perintah | Deskripsi |
+|---|---|
+| `/skripsi-proposal` | Panduan penyusunan draf proposal skripsi lengkap (Bab 1 s/d Bab 3). |
+| `/skripsi-bab [1-5]` | Asistensi penulisan per bab sesuai pedoman akademik & masukan pembimbing. |
+| `/skripsi-matriks` | Generate matriks penelitian terdahulu 13 kolom (5-20+ jurnal). |
+| `/skripsi-citation` | Verifikasi rasio 80% jurnal mutakhir & deteksi sitasi fiktif (*anti-phantom*). |
+| `/skripsi-eyd` | Evaluasi teks berdasarkan kaidah tata bahasa resmi EYD V. |
+| `/skripsi-abstract` | Pembuatan abstrak bilingual 5 kalimat dengan kata kunci alfabetis. |
+| `/skripsi-defense` | Simulasi ujian sidang pendadaran / munaqasyah skripsi bersama dewan penguji. |
+| `/skripsi-full` | Orkestrasi menyeluruh skripsi dari bab 1 hingga bab 5 dengan preset fakultas. |
+
+*(Seluruh perintah bawaan ARS seperti `/ars-plan`, `/ars-reviewer`, `/ars-full` tetap aktif dan dapat digunakan).*
+
+---
 
 > **AI is your copilot, not the pilot.** It can draft text, including a whole paper in full mode, but the decisions stay yours, and the pipeline stops for your confirmation at every stage. It handles the grunt work (hunting down references, formatting citations, verifying data, checking logical consistency) so you can focus on the parts that actually require your brain: defining the question, choosing the method, interpreting what the data means, and deciding what comes after "I argue that." You remain the author, and you answer for every claim you submit.
 >
@@ -64,7 +145,7 @@ The architecture doc supersedes the sprawling pipeline description that used to 
 **Plugin install (v3.7.0+, recommended):**
 
 ```text
-/plugin marketplace add Imbad0202/academic-research-skills
+/plugin marketplace add firdausmntp/nyekripsi
 /plugin install academic-research-skills
 ```
 
@@ -76,9 +157,9 @@ The architecture doc supersedes the sprawling pipeline description that used to 
 
 **👉 [docs/RISK_REGISTER.md](docs/RISK_REGISTER.md)** — the standing risks the suite knows about, which existing controls address each one, the evidence status behind those controls, and what remains open.
 
-**Using Claude Science?** The five skills import directly: **Skills → Import from GitHub**, paste `https://github.com/Imbad0202/academic-research-skills`, **Preview**, then **Import** (requires v3.14.0+ of this repo — the importer reads the explicit skill paths in the marketplace manifest). Imports are point-in-time snapshots: re-import after ARS updates. Imported skills carry the ARS methodology (research / writing / review protocols); Claude Code-specific machinery — slash commands, hooks, subagent orchestration — does not transfer. See [docs/SETUP.md](docs/SETUP.md) Method 5 for details.
+**Using Claude Science?** The five skills import directly: **Skills → Import from GitHub**, paste `https://github.com/firdausmntp/nyekripsi`, **Preview**, then **Import** (requires v3.14.0+ of this repo — the importer reads the explicit skill paths in the marketplace manifest). Imports are point-in-time snapshots: re-import after ARS updates. Imported skills carry the ARS methodology (research / writing / review protocols); Claude Code-specific machinery — slash commands, hooks, subagent orchestration — does not transfer. See [docs/SETUP.md](docs/SETUP.md) Method 5 for details.
 
-**Using Pi?** Install the in-tree, community-maintained wrapper with `pi install git:github.com/Imbad0202/academic-research-skills`. It keeps the original ARS content authoritative and documents Pi-specific orchestration and hook limitations. See [`pi/README.md`](pi/README.md).
+**Using Pi?** Install the in-tree, community-maintained wrapper with `pi install git:github.com/firdausmntp/nyekripsi`. It keeps the original ARS content authoritative and documents Pi-specific orchestration and hook limitations. See [`pi/README.md`](pi/README.md).
 
 **Using Codex CLI?** Install the sibling distribution instead: [`Imbad0202/academic-research-skills-codex`](https://github.com/Imbad0202/academic-research-skills-codex) — same workflow content, Codex-native packaging as a single `$academic-research-suite` skill with `ars-*` aliases.
 
@@ -92,8 +173,8 @@ The architecture doc supersedes the sprawling pipeline description that used to 
 
 ## Guides & articles
 
-- [Academic Writing Shouldn't Be a Solo Act](https://open.substack.com/pub/edwardwu223235/p/academic-writing-shouldnt-be-a-solo?r=4dczl&utm_medium=ios) — full pipeline walkthrough (English)
-- [學術寫作不該是一個人的事：一套開源 AI 協作工具如何改變研究者的工作流](https://open.substack.com/pub/edwardwu223235/p/ai?r=4dczl&utm_medium=ios) — 完整使用指南（繁體中文）
+- [Panduan Penulisan Skripsi S1 Indonesia (nyekripsi)](academic-paper/templates/bab1/README.md) — Panduan komprehensif alur Bab I s/d Bab V
+- [Academic Writing Shouldn't Be a Solo Act](https://open.substack.com/pub/edwardwu223235/p/academic-writing-shouldnt-be-a-solo?r=4dczl&utm_medium=ios) — upstream pipeline walkthrough (English)
 
 ---
 
@@ -354,15 +435,18 @@ This work is licensed under [CC-BY-NC 4.0](https://creativecommons.org/licenses/
 
 **Attribution format:**
 ```
-Based on Academic Research Skills by Cheng-I Wu
-https://github.com/Imbad0202/academic-research-skills
+nyekripsi (Indonesian Thesis S1 Toolkit)
+Fork of Academic Research Skills by Cheng-I Wu (https://github.com/Imbad0202/academic-research-skills)
+Maintained by Firdaus (https://github.com/firdausmntp/nyekripsi)
 ```
 
 ---
 
 ## Contributors
 
-**Cheng-I Wu** (吳政宜) — Author and maintainer
+**Firdaus** ([@firdausmntp](https://github.com/firdausmntp)) — Creator & Maintainer of `nyekripsi` (Indonesian Thesis S1 Toolkit)
+
+**Cheng-I Wu** (吳政宜) — Author and maintainer of upstream `academic-research-skills`
 
 **[aspi6246](https://github.com/aspi6246)** — Contributor. The v3.1 optimization was inspired by patterns from [Claude-Code-Skills-for-Academics](https://github.com/aspi6246/Claude-Code-Skills-for-Academics): read-only constraint pattern, anti-pattern codification as first-class design, cognitive framework approach (teaching "how to think" not just procedures), and lean skill size philosophy.
 
@@ -370,19 +454,9 @@ https://github.com/Imbad0202/academic-research-skills
 
 **[cloudenochcsis](https://github.com/cloudenochcsis)** — Contributor. Extended the IS section from the *Basket of 8* to the full *Senior Scholars' Basket of 11* — adding *Decision Support Systems*, *Information & Management*, and *Information and Organization* ([Issue #7](https://github.com/Imbad0202/academic-research-skills/issues/7), [PR #8](https://github.com/Imbad0202/academic-research-skills/pull/8)). Sourced from the [AIS Senior Scholars' List of Premier Journals](https://aisnet.org/research/seniorscholarsbasket/).
 
-**[eltociear](https://github.com/eltociear)** (Ikko Eltociear Ashimine) — Contributor. Translated the Japanese README ([`README.ja-JP.md`](README.ja-JP.md)) ([PR #161](https://github.com/Imbad0202/academic-research-skills/pull/161)).
-
-**[xpfo-go](https://github.com/xpfo-go)** (xpfo) — Contributor. Translated the Simplified Chinese README ([`README.zh-CN.md`](README.zh-CN.md)) ([PR #181](https://github.com/Imbad0202/academic-research-skills/pull/181)).
-
-**[devCharlotte](https://github.com/devCharlotte)** — Contributor. Translated the Korean README ([`README.ko-KR.md`](README.ko-KR.md)) ([PR #469](https://github.com/Imbad0202/academic-research-skills/pull/469)).
-
 **[Yaobin29](https://github.com/Yaobin29)** — Contributor. Proposed reviewer-response tooling in [PR #433](https://github.com/Imbad0202/academic-research-skills/pull/433); the `deep-research three-way-scan` mode and the `academic-paper rebuttal-audit` mode (rescued from the PR's `audit` concept) were integrated from that contribution in v3.12.1.
 
 **[ktao732084-arch](https://github.com/ktao732084-arch)** — Contributor. Expanded the `academic-paper` disclosure system with nine medical-publishing policy targets, target-specific required-fact intake, and fail-closed standalone rendering ([Issue #596](https://github.com/Imbad0202/academic-research-skills/issues/596), [PR #599](https://github.com/Imbad0202/academic-research-skills/pull/599)); expanded the EQUATOR clinical-reporting reference with condensed CARE, STARD and TRIPOD+AI guidance plus a fail-closed study-design routing sequence ([Issue #594](https://github.com/Imbad0202/academic-research-skills/issues/594), [PR #601](https://github.com/Imbad0202/academic-research-skills/pull/601)); and designed and contributed the standalone Chinese-literature resolver, API protocol, and synthetic transport-fixture suite ([Issue #595](https://github.com/Imbad0202/academic-research-skills/issues/595), [PR #600](https://github.com/Imbad0202/academic-research-skills/pull/600)).
-
-**[didacrios](https://github.com/didacrios)** — Contributor. Translated the Spanish README ([`README.es-ES.md`](README.es-ES.md)).
-
-**[laqueiroz](https://github.com/laqueiroz)** (Laís Queiróz) — Contributor. Translated the Brazilian Portuguese README ([`README.pt-BR.md`](README.pt-BR.md)).
 
 ---
 

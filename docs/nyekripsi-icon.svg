@@ -1,0 +1,23 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" width="128" height="128">
+  <!--
+    nyekripsi Icon Mark: "The Dialectic Gate / Gerbang Dialektika Objek Material & Formal"
+    - An entirely original geometric abstraction.
+    - Left chevron/pillar: Objek Material (empiris / fenomena).
+    - Right chevron/pillar: Objek Formal (teori / pisau analisis).
+    - Central negative-space rhomboid: Sintesis / Temuan Baru Skripsi.
+    - Zero gradients, zero drop shadows, solid monochrome contrast with single cobalt pivot.
+  -->
+  <g fill="none" stroke-linecap="round" stroke-linejoin="round">
+    <!-- Solid Dark Canvas/Token Backdrop -->
+    <rect width="128" height="128" rx="28" fill="#090d16"/>
+    
+    <!-- Left Structure: Angular Column with 60-degree precision bevel -->
+    <path d="M 28 32 L 48 32 L 64 64 L 48 96 L 28 96 L 44 64 Z" fill="#f8fafc"/>
+    
+    <!-- Right Structure: Intersecting Counter-Chevron (Dialectic Counterpart) -->
+    <path d="M 100 32 L 80 32 L 64 64 L 80 96 L 100 96 L 84 64 Z" fill="#f8fafc"/>
+    
+    <!-- Central Tension Core (Pisau Analisis / Breakthrough Point) -->
+    <polygon points="64,48 72,64 64,80 56,64" fill="#2563eb"/>
+  </g>
+</svg>
