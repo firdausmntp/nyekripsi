@@ -8,7 +8,7 @@ command_glob = "commands/*.md"
 
 [[announce]]
 path = "scripts/announce-ars-loaded.sh"
-token_pattern = '/(?P<name>ars-[a-z0-9-]+)'
+token_pattern = '/(?P<name>(?:ars|skripsi)-[a-z0-9-]+)'
 # Each ANNOUNCE="..." assignment (resume short form + startup long form) is an
 # independent region: every command must appear in BOTH, so drift in one form
 # cannot hide behind the other, and comments don't count as "listed".
